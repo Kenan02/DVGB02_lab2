@@ -24,11 +24,11 @@ struct event *evlist = NULL; /* The event list */
 #define A 0
 #define B 1
 
-int TRACE = 1;       /* For my debugging */
+int TRACE = 2;       /* For my debugging */
 int nsim = 0;        /* Number of messages from 5 to 4 so far */
 int nsimmax = 0;     /* Number of messages to generate, then stop */
 float time = 0.000;
-float lossprob;      /* Probability that a packet is dropped  */
+float lossprob;      /* Probability that a packet is dropped  */ 
 float corruptprob;   /* Probability that one bit is packet is flipped */
 float lambda;        /* Arrival rate of messages from layer 5 */
 int ntolayer3;       /* Number sent into layer 3 */
