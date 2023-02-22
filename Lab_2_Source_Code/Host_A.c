@@ -6,18 +6,17 @@
 
 
 struct pkt packet;
-
+float Timeout;
 
 // Skapa en int checksum
-int calculate_checksum(struct pkt packet)
+int calculate_checksum(char* p)
 {
   int sum = 0;
   for (int i = 0; i < SIZE; i++)
   {
-    sum += packet.payload[i];
+    sum += p[i];
   }
 
-  sum += packet.seqnum + packet.acknum;
   return sum;
 }
 
@@ -27,8 +26,8 @@ struct pkt A_createpkt(int seq, struct msg message)
   packet.seqnum = seq;
   packet.acknum = 0;
   strcpy(packet.payload, message.data);
-  packet.checksum = calculate_checksum(packet);
-  
+  int int_msg = calculate_checksum(packet.payload);
+  packet.checksum = int_msg + packet.seqnum + packet.acknum;
 }
 
 int packet_num;
@@ -52,7 +51,7 @@ void A_output(struct msg message)
     tolayer3(0, packet);
     printf("\nRound %d, buffer[%d], message: %s\n", rnd, i - 1, message.data);
     rnd++;
-    starttimer(0, time); printf("Packet 1 skickat, timer 1 started\n");
+    starttimer(0, Timeout); printf("Packet 1 skickat, timer 1 started\n");
     packet_num = 1;
   }
 
@@ -63,7 +62,7 @@ void A_output(struct msg message)
     tolayer3(0, packet);
     printf("\nRound %d, buffer[%d], message: %s\n", rnd, i - 1, message.data);
     rnd++;
-    starttimer(0, time); printf("Packet 1 skickat, timer 1 started");
+    starttimer(0, Timeout); printf("Packet 1 skickat, timer 1 started");
     packet_num = 0;
   }
 }
@@ -76,12 +75,31 @@ void A_input(struct pkt packet)
   int int_payload = atoi(packet.payload);
   int calc_sum = packet.acknum + packet.seqnum + int_payload;
   printf("ACK %d recieved: \n", packet.acknum);
+
+  if(packet.checksum == calc_sum){
+    if(packet.acknum == 0){
+      ACK0 = 1;
+      stoptimer(0);
+      printf("ACK 0 recevied timer 0 stopped\n");
+    }
+    if(packet.acknum == 1){
+      ACK1 = 1;
+      stoptimer(0);
+      printf("ACK 1 received, timer 1 stopped");
+    }
+  }
 }
 
 /* Called when A's timer goes off */
 void A_timerinterrupt()
 {
   /* TODO */
+  printf("timeout packet %d: ", packet.seqnum);
+
+  //retransmitt package and start timer again
+  tolayer3(0, packet);
+  printf("Retransmitting packet %d: ", packet.seqnum);
+  starttimer(0, Timeout);
 }
 
 /* The following routine will be called once (only) before any other */
@@ -89,4 +107,8 @@ void A_timerinterrupt()
 void A_init()
 {
   /* TODO */
+  packet_num = 0;
+  Timeout = 11;
+  ACK1 = 1;
+  ACK0 = 1;
 }
