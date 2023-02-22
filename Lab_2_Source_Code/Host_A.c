@@ -2,12 +2,11 @@
 
 #define SIZE 20
 #define BUFF_SIZE 100000
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+
+
 
 struct pkt packet;
-float Timeout;
+
 
 // Skapa en int checksum
 int calculate_checksum(struct pkt packet)
@@ -22,16 +21,17 @@ int calculate_checksum(struct pkt packet)
   return sum;
 }
 
-struct pkt A_createpacket(int seq, struct msg message)
+struct pkt A_createpkt(int seq, struct msg message)
 {
   printf("A skapar en packet\n");
   packet.seqnum = seq;
   packet.acknum = 0;
   strcpy(packet.payload, message.data);
   packet.checksum = calculate_checksum(packet);
+  
 }
 
-int packet_no;
+int packet_num;
 int ACK0, ACK1;
 struct msg buffer[BUFF_SIZE];
 int buff_read = 0;
@@ -45,14 +45,26 @@ void A_output(struct msg message)
   buffer[i] = message;
   i++;
 
-  if(packet_no == 0 && ACK1 == 1){
+  if(packet_num == 0 && ACK1 == 1){
     ACK0 = 0;
-    A_createpacket(0, buffer[buff_read]);
+    A_createpkt(0, buffer[buff_read]);
     buff_read++;
     tolayer3(0, packet);
     printf("\nRound %d, buffer[%d], message: %s\n", rnd, i - 1, message.data);
     rnd++;
-    starttimer(0, Timeout); printf("Packet 1 skickat, timer 1 started\n");
+    starttimer(0, time); printf("Packet 1 skickat, timer 1 started\n");
+    packet_num = 1;
+  }
+
+  if(packet_num == 1 && ACK0 == 1){
+    ACK1 = 0;
+    A_createpkt(1, buffer[buff_read]);
+    buff_read++;
+    tolayer3(0, packet);
+    printf("\nRound %d, buffer[%d], message: %s\n", rnd, i - 1, message.data);
+    rnd++;
+    starttimer(0, time); printf("Packet 1 skickat, timer 1 started");
+    packet_num = 0;
   }
 }
 
@@ -61,6 +73,9 @@ void A_input(struct pkt packet)
 {
   /* TODO */
   // Här hamnar packetet som B skickar till A.
+  int int_payload = atoi(packet.payload);
+  int calc_sum = packet.acknum + packet.seqnum + int_payload;
+  printf("ACK %d recieved: \n", packet.acknum);
 }
 
 /* Called when A's timer goes off */
