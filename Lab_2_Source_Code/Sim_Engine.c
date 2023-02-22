@@ -24,11 +24,11 @@ struct event *evlist = NULL; /* The event list */
 #define A 0
 #define B 1
 
-int TRACE = 2;       /* For my debugging */
+int TRACE = 1;       /* For my debugging */
 int nsim = 0;        /* Number of messages from 5 to 4 so far */
 int nsimmax = 0;     /* Number of messages to generate, then stop */
 float time = 0.000;
-float lossprob;      /* Probability that a packet is dropped  */ 
+float lossprob;      /* Probability that a packet is dropped  */
 float corruptprob;   /* Probability that one bit is packet is flipped */
 float lambda;        /* Arrival rate of messages from layer 5 */
 int ntolayer3;       /* Number sent into layer 3 */
@@ -361,6 +361,11 @@ void tolayer3(int AorB /* A or B is trying to stop timer */, struct pkt packet) 
     insertevent(evptr);
 }
 
+#define END     "\033[0m"
+#define RED     "\033[31m"
+#define GREEN   "\033[32m"
+#define YELLOW  "\033[33m"
+static char lastmsg = 'a' - 1;
 void tolayer5(int AorB, char datasent[20]) {
     int i;
     if (TRACE > 2) {
@@ -369,4 +374,10 @@ void tolayer5(int AorB, char datasent[20]) {
             printf("%c", datasent[i]);
         printf("\n");
     }
+	if (lastmsg == 'z') lastmsg = 'a' - 1;
+	if (lastmsg + 1 != datasent[0] && TRACE == -1)
+		printf("Packet " YELLOW "%c" END " recieved at B in " RED "incorrect order" END ", expected " YELLOW "%c\n" END, datasent[0], lastmsg + 1);
+	else
+		printf("Packet " YELLOW "%c" END " recieved at B in " GREEN "correct order" END "\n", datasent[0]);
+	lastmsg++;
 }
