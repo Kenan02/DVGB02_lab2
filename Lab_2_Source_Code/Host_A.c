@@ -51,7 +51,7 @@ void A_output(struct msg message)
     printf("\nRound %d, buffer[%d], message: %s\n", rnd, i - 1, message.data);
     rnd++;
     starttimer(0, Timeout);
-    printf("Packet 1 skickat, timer 1 started\n");
+    printf("Packet 0 skickat, timer 0 started\n");
     packet_num = 1;
   }
 
@@ -75,11 +75,13 @@ void A_input(struct pkt packet)
   /* TODO */
   // Här hamnar packetet som B skickar till A.
   int int_payload = atoi(packet.payload);
-  int calc_sum = packet.acknum + packet.seqnum + int_payload;
-  printf("ACK %d recieved: \n", packet.acknum);
-
+  int calc_sum = packet.acknum + packet.seqnum;
+  printf("checksum: %d, calculated checksum: %d \n", packet.checksum, calc_sum);
   if (packet.checksum == calc_sum)
   {
+      //printf("ACK %d recieved\n", packet.acknum);
+    printf("ack: %d\n", packet.acknum);
+
     if (packet.acknum == 0)
     {
       ACK0 = 1;

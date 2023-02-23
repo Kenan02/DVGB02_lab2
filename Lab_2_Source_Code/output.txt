@@ -1,0 +1,52 @@
+-----  Stop and Wait Network Simulator Version 1.1 -------- 
+
+The number of messages to simulate: 5
+Packet loss probability: 0.200000
+Packet corruption probability: 0.200000
+Average time between messages from sender's layer 5: 100.000000
+Trace: -1
+A skapar en packet
+
+Round 1, buffer[0], message: aaaaaaaaaaaaaaaaaaa
+Packet 1 skickat, timer 1 started
+Packet 0 received, packet.checksum: 1843 calc_checksum: 1843, data: aaaaaaaaaaaaaaaaaaa
+
+Packet [33ma[0m recieved at B in [32mcorrect order[0m
+ACK 0 sent
+ACK 0 recieved
+timeout packet 0: Retransmitting packet 0: timeout packet 0: Retransmitting packet 0: timeout packet 0: Retransmitting packet 0: Packet 0 received, packet.checksum: 1843 calc_checksum: 1843, data: aaaaaaaaaaaaaaaaaaa
+
+ACK 1 sent
+timeout packet 0: Retransmitting packet 0: Packet 0 received, packet.checksum: 1843 calc_checksum: 1843, data: aaaaaaaaaaaaaaaaaaa
+
+Packet [33ma[0m recieved at B in [31mincorrect order[0m, expected [33mb
+[0mACK 0 sent
+ACK 0 recieved
+ACK 0 recevied timer 0 stopped
+A skapar en packet
+
+Round 2, buffer[1], message: bbbbbbbbbbbbbbbbbbb
+Packet 1 skickat, timer 1 startedPacket 1 received, packet.checksum: 1863 calc_checksum: 1863, data: bbbbbbbbbbbbbbbbbbb
+
+Packet [33mb[0m recieved at B in [31mincorrect order[0m, expected [33mc
+[0mACK 1 sent
+timeout packet 1: Retransmitting packet 1: Packet 1 received
+Packet dropped, was expecting packet 0
+timeout packet 1: Retransmitting packet 1: Packet 1 received
+Packet dropped, was expecting packet 0
+timeout packet 1: Retransmitting packet 1: Packet 1 received, packet.checksum: 1863 calc_checksum: 1863, data: bbbbbbbbbbbbbbbbbbb
+
+ACK 0 sent
+timeout packet 1: Retransmitting packet 1: Packet 1 received
+Packet dropped, was expecting packet 1
+timeout packet 1: Retransmitting packet 1: Packet 1 received, packet.checksum: 1863 calc_checksum: 1863, data: bbbbbbbbbbbbbbbbbbb
+
+Packet [33mb[0m recieved at B in [31mincorrect order[0m, expected [33md
+[0mACK 1 sent
+timeout packet 1: Retransmitting packet 1: Packet 1 received, packet.checksum: 1863 calc_checksum: 1863, data: bbbbbbbbbbbbbbbbbbb
+
+ACK 0 sent
+ACK 0 recieved
+ACK 0 recevied timer 0 stopped
+
+Simulator terminated at time 784.450867 after sending 5 messages from layer 5
