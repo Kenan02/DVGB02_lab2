@@ -22,7 +22,7 @@ struct pkt A_createpkt(int seq, struct msg message)
 {
   printf("A skapar en packet\n");
   packet.seqnum = seq;
-  packet.acknum = 0;
+  packet.acknum = seq;
   strcpy(packet.payload, message.data);
   int int_msg = calculate_checksum(packet.payload);
   packet.checksum = int_msg + packet.seqnum + packet.acknum;
@@ -74,8 +74,8 @@ void A_input(struct pkt packet)
 {
   /* TODO */
   // Här hamnar packetet som B skickar till A.
-  int int_payload = atoi(packet.payload);
   int calc_sum = packet.acknum + packet.seqnum;
+  printf("ACKNUM: %d, SEQNUM: %d\n", packet.acknum, packet.seqnum);
   printf("checksum: %d, calculated checksum: %d \n", packet.checksum, calc_sum);
   if (packet.checksum == calc_sum)
   {

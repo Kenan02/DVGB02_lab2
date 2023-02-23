@@ -44,28 +44,30 @@ void B_input(struct pkt packet)
 
     printf("Packet %d received, packet.checksum: %d calc_checksum: %d, data: %s\n\n", packet.seqnum, packet.checksum, calc_checksum, packet.payload);
     if (exp_pack == packet.seqnum)
+    {
       tolayer5(1, packet.payload);
 
-    if (exp_pack == 0)
-    {
-      exp_pack = 1;
-      printf("ACK 0 sent\n");
-    }
-    else if (exp_pack == 1)
-    {
-      exp_pack = 0;
-      printf("ACK 1 sent\n");
+      if (exp_pack == 0)
+      {
+        exp_pack = 1;
+        printf("ACK 0 sent\n");
+      }
+      else if (exp_pack == 1)
+      {
+        exp_pack = 0;
+        printf("ACK 1 sent\n");
+      }
     }
     else
     {
       printf("Packet %d received\n", packet.seqnum);
-      printf("checksum mismatch, packet checksum: %d, calc_checksum: %d", packet.checksum, calc_checksum);
+      printf("Packet dropped, was expecting packet %d\n", exp_pack);
     }
   }
   else
   {
     printf("Packet %d received\n", packet.seqnum);
-    printf("Packet dropped, was expecting packet %d\n", exp_pack);
+    printf("checksum mismatch, packet checksum: %d, calc_checksum: %d", packet.checksum, calc_checksum);
   }
 }
 
