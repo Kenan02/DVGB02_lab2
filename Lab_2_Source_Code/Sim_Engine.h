@@ -26,7 +26,7 @@ struct pkt {
    int seqnum;
    int acknum;
    int checksum;
-   char payload[20];
+   char payload[20]; //Den datan som skickas genom message
 };
 
 /* A or B is trying to stop timer */

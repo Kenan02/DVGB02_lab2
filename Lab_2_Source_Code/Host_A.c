@@ -75,12 +75,10 @@ void A_input(struct pkt packet)
   /* TODO */
   // Här hamnar packetet som B skickar till A.
   int calc_sum = packet.acknum + packet.seqnum;
-  printf("ACKNUM: %d, SEQNUM: %d\n", packet.acknum, packet.seqnum);
-  printf("checksum: %d, calculated checksum: %d \n", packet.checksum, calc_sum);
+
+  printf("checksum: %d, calculated checksum: %d\n\n", packet.checksum, calc_sum);
   if (packet.checksum == calc_sum)
   {
-      //printf("ACK %d recieved\n", packet.acknum);
-    printf("ack: %d\n", packet.acknum);
 
     if (packet.acknum == 0)
     {
@@ -92,7 +90,7 @@ void A_input(struct pkt packet)
     {
       ACK1 = 1;
       stoptimer(0);
-      printf("ACK 1 received, timer 1 stopped");
+      printf("ACK 1 received, timer 1 stopped\n");
     }
   }
 }
@@ -105,7 +103,7 @@ void A_timerinterrupt()
 
   // retransmitt package and start timer again
   tolayer3(0, packet);
-  printf("Retransmitting packet %d: ", packet.seqnum);
+  printf("Retransmitting packet:%d.\n", packet.seqnum);
   starttimer(0, Timeout);
 }
 
