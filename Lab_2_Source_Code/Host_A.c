@@ -29,7 +29,7 @@ struct pkt A_createpkt(int seq, struct msg message)
 }
 
 int packet_num;
-int ACK0, ACK1;
+int ack0, ack1;
 struct msg buffer[BUFF_SIZE];
 int buff_read = 0;
 int rnd = 1;
@@ -42,29 +42,29 @@ void A_output(struct msg message)
   buffer[i] = message;
   i++;
 
-  if (packet_num == 0 && ACK1 == 1)
+  if (packet_num == 0 && ack1 == 1)
   {
-    ACK0 = 0;
+    ack0 = 0;
     A_createpkt(0, buffer[buff_read]);
     buff_read++;
     tolayer3(0, packet);
+    starttimer(0, Timeout);
     printf("\nRound %d, buffer[%d], message: %s\n", rnd, i - 1, message.data);
     rnd++;
-    starttimer(0, Timeout);
     printf("Packet 0 skickat, timer 0 started\n");
     packet_num = 1;
   }
 
-  if (packet_num == 1 && ACK0 == 1)
+  if (packet_num == 1 && ack0 == 1)
   {
-    ACK1 = 0;
+    ack1 = 0;
     A_createpkt(1, buffer[buff_read]);
     buff_read++;
     tolayer3(0, packet);
+    starttimer(0, Timeout);
     printf("\nRound %d, buffer[%d], message: %s\n", rnd, i - 1, message.data);
     rnd++;
-    starttimer(0, Timeout);
-    printf("Packet 1 skickat, timer 1 started");
+    printf("Packet 1 skickat, timer 1 started\n");
     packet_num = 0;
   }
 }
@@ -82,13 +82,13 @@ void A_input(struct pkt packet)
 
     if (packet.acknum == 0)
     {
-      ACK0 = 1;
+      ack0 = 1;
       stoptimer(0);
-      printf("ACK 0 recevied timer 0 stopped\n");
+      printf("ACK 0 recevied, timer 0 stopped\n");
     }
     if (packet.acknum == 1)
     {
-      ACK1 = 1;
+      ack1 = 1;
       stoptimer(0);
       printf("ACK 1 received, timer 1 stopped\n");
     }
@@ -114,6 +114,6 @@ void A_init()
   /* TODO */
   packet_num = 0;
   Timeout = 11;
-  ACK1 = 1;
-  ACK0 = 1;
+  ack1 = 1;
+  ack0 = 1;
 }

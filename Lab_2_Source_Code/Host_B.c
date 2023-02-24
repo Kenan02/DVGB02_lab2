@@ -67,7 +67,7 @@ void B_input(struct pkt packet)
   else
   {
     printf("Packet %d received\n", packet.seqnum);
-    printf("checksum mismatch, packet checksum: %d, calc_checksum: %d", packet.checksum, calc_checksum);
+    printf("checksum mismatch, packet checksum: %d, calc_checksum: %d\n", packet.checksum, calc_checksum);
   }
 }
 
