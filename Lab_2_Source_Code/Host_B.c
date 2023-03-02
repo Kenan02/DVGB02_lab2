@@ -29,10 +29,10 @@ void B_output(struct msg message)
 }
 
 /* Called from layer 3, when a packet arrives for layer 4 */
-int exp_pack;
+static int exp_pack;
 void B_input(struct pkt packet)
 {
-  /* TODO */
+  
   // B_INPUT är vad B får utav a, måste kolla chekcsum
   //  och skicka en NACK eller ACK
   int int_payload = CheckSum(packet.payload);

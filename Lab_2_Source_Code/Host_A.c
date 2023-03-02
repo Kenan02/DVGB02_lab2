@@ -4,9 +4,9 @@
 #define BUFF_SIZE 100000
 
 struct pkt packet;
-float Timeout;
+static float Timeout;
 
-// Skapa en int checksum
+
 int calculate_checksum(char *p)
 {
   int sum = 0;
@@ -20,7 +20,7 @@ int calculate_checksum(char *p)
 
 struct pkt A_createpkt(int seq, struct msg message)
 {
-  printf("A skapar en packet\n");
+  printf("A creating packet...\n");
   packet.seqnum = seq;
   packet.acknum = seq;
   strcpy(packet.payload, message.data);
@@ -28,12 +28,12 @@ struct pkt A_createpkt(int seq, struct msg message)
   packet.checksum = int_msg + packet.seqnum + packet.acknum;
 }
 
-int packet_num;
-int ack0, ack1;
-struct msg buffer[BUFF_SIZE];
-int buff_read = 0;
-int rnd = 1;
-int i = 0;
+static int packet_num;
+static int ack0, ack1;
+static struct msg buffer[BUFF_SIZE];
+static int buff_read = 0;
+static int rnd = 1;
+static int i = 0;
 /* Called from layer 5, passed the data to be sent to other side */
 void A_output(struct msg message)
 {
@@ -41,6 +41,8 @@ void A_output(struct msg message)
   // Det som skickas över till B sidan
   buffer[i] = message;
   i++;
+
+
 
   if (packet_num == 0 && ack1 == 1)
   {
