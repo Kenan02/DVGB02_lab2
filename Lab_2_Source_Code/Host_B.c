@@ -1,3 +1,5 @@
+
+//LABB GENOMFÖRD AV KENAN SAHINOVIC OCH OLIVER RANER
 #include "Sim_Engine.h"
 
 #define SIZE 20
